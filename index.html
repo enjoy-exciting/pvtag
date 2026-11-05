@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PVtag – 画像・動画にタグを付けて見つけやすくするWindowsアプリ</title>
+<style>
+:root{--bg:#f3f4f8;--card:#fff;--fg:#1d2030;--mute:#5d6378;--bd:#dfe2ec;--ac:#4f63e6;--acfg:#fff;
+--m-win:#eceef4;--m-pan:#e2e5ee;--m-card:#fff;--m-bd:#cfd3e0;--m-fg:#2a2d3d;--m-mute:#8a90a6;--m-bar:#161616}
+@media (prefers-color-scheme:dark){:root{--bg:#121317;--card:#1b1d23;--fg:#e8eaf2;--mute:#9aa1b7;--bd:#2c2f3a;--ac:#8c9bff;--acfg:#12131a;
+--m-win:#17181c;--m-pan:#1e2026;--m-card:#262932;--m-bd:#343845;--m-fg:#e3e6f0;--m-mute:#7e869c}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.8 "Meiryo UI","Yu Gothic UI",system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.w{max-width:1000px;margin:0 auto;padding:0 20px}
+header.hero{padding:64px 0 32px;text-align:center}
+h1{font-size:clamp(34px,6vw,56px);margin:0;letter-spacing:.02em}
+h1 span{color:var(--ac)}
+.lead{font-size:18px;color:var(--mute);max-width:640px;margin:12px auto 24px}
+.btn{display:inline-block;padding:12px 28px;border-radius:12px;background:var(--ac);color:var(--acfg);text-decoration:none;font-weight:700}
+.btn.sub{background:transparent;color:var(--ac);border:2px solid var(--ac);margin-left:8px}
+.shot{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
+.shot svg{display:block;width:100%;height:auto}
+figcaption{font-size:13px;color:var(--mute);text-align:center;padding:8px 4px 0}
+figure{margin:0}
+section{padding:44px 0}
+h2{font-size:26px;margin:0 0 20px;padding-left:12px;border-left:5px solid var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px 20px}
+.card h3{margin:0 0 6px;font-size:17px;color:var(--ac)}
+.card p{margin:0;font-size:14.5px;color:var(--mute);line-height:1.7}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:center}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:10px 16px;border-bottom:1px solid var(--bd);font-size:14.5px;vertical-align:top}
+th{width:30%;color:var(--mute);font-weight:600;background:color-mix(in srgb,var(--bd) 35%,transparent)}
+tr:last-child th,tr:last-child td{border-bottom:0}
+.tw{overflow-x:auto}
+ol{padding-left:22px}li{margin:6px 0}
+code{background:var(--bd);padding:1px 6px;border-radius:5px;font-size:.9em}
+.note{font-size:13.5px;color:var(--mute)}
+footer{padding:32px 0 48px;text-align:center;color:var(--mute);font-size:13px}
+.t{fill:var(--m-fg);font:11px "Meiryo UI",sans-serif}.tm{fill:var(--m-mute);font:10px "Meiryo UI",sans-serif}
+</style>
+</head>
+<body>
+<header class="hero"><div class="w">
+<h1>PV<span>tag</span></h1>
+<p class="lead">画像・動画に「人物」と「その他」のタグを付けて、サムネイル一覧からすぐ探せる。Windows用のデスクトップアプリです。</p>
+<a class="btn" href="#download">ダウンロード</a><a class="btn sub" href="#features">機能を見る</a>
+<figure style="margin-top:36px"><div class="shot"><svg id="main" viewBox="0 0 720 400" role="img" aria-label="メイン画面のイメージ"></svg></div>
+<figcaption>メイン画面のイメージ（左：人物タグ／中央：サムネイル一覧／右：タグの追加・編集）</figcaption></figure>
+</div></header>
+
+<section id="features"><div class="w">
+<h2>主な機能</h2>
+<div class="grid">
+<div class="card"><h3>人物・その他の2種類のタグ</h3><p>人物タグはジャンル分けでき、顔写真つきのカードで選べます。チェックで絞り込み（AND / OR）、「人物タグ未登録のみ」の表示も可能。</p></div>
+<div class="card"><h3>サムネイル一覧</h3><p>複数フォルダをまとめて読み込み。画像・動画の切り替え、検索、並び順（名前順はWindowsと同じ）、サムネイルの大きさ変更に対応。</p></div>
+<div class="card"><h3>クリックで一発抽出</h3><p>一覧の「@人物名」「#タグ名」をクリックすると、そのタグのファイルだけを全フォルダから抽出。もう一度押すと元の状態に戻ります。</p></div>
+<div class="card"><h3>内蔵ビューワー</h3><p>拡大縮小・全画面・自動めくりに対応。ホイールやサイドボタンも操作に割り当てられます。</p></div>
+<div class="card"><h3>動画の再生</h3><p>OpenCVによる内蔵再生（音なし）に加え、VLCがあれば音つきで再生。再生バー、シーク、ループ、音量、GPUデコードの補助にも対応。</p></div>
+<div class="card"><h3>移動・改名してもタグが付いてくる</h3><p>ファイルの指紋で照合するため、フォルダを移したり名前を変えたりしてもタグが外れません。</p></div>
+<div class="card"><h3>お気に入り（☆☆☆）</h3><p>3段階の星で評価。絞り込み、お気に入り順の並べ替え、ビューワー上で1・2・3キーによる評価ができます。</p></div>
+<div class="card"><h3>緊急モード（F4）</h3><p>ワンキーでウィンドウを隠してタスクトレイへ格納。トレイのアイコンから元の位置に戻せます。</p></div>
+<div class="card"><h3>ライト／ダーク・キー設定</h3><p>テーマの切り替え、キー・マウスホイール・サイドボタンの割り当て、外部アプリ連携、パネルの別ウィンドウ化など。</p></div>
+</div></div></section>
+
+<section><div class="w">
+<h2>画面紹介</h2>
+<div class="two">
+<figure><div class="shot"><svg id="viewer" viewBox="0 0 480 300" role="img" aria-label="ビューワーのイメージ"></svg></div><figcaption>内蔵ビューワー（動画は再生バーつき）</figcaption></figure>
+<div><h3 style="margin-top:0">ビューワー</h3><p>画像・動画両方に対応。拡大縮小機能（画像の場合のみ）自動めくり機能、音量調整機能付き。</p><p class="note">VLCが無い環境では、自動的に内蔵のOpenCV再生に切り替わります。</p></div>
+</div>
+<div class="two" style="margin-top:36px">
+<div><h3 style="margin-top:0">タグパレット</h3><p>過去に使ったタグをジャンルごとにまとめた別ウィンドウ。</p></div>
+<figure><div class="shot"><svg id="pal" viewBox="0 0 480 300" role="img" aria-label="タグパレットのイメージ"></svg></div><figcaption>タグパレット</figcaption></figure>
+</div>
+</div></section>
+
+<section><div class="w">
+<h2>仕様</h2>
+<div class="tw"><table>
+<tr><th>対応OS</th><td>Windows</td></tr>
+<tr><th>対応ファイル</th><td>画像・動画</td></tr>
+<tr><th>動画再生</th><td>内蔵（OpenCV・音なし）／VLC（音あり・任意）</td></tr>
+<tr><th>サムネイル</th><td>S / M / L のキャッシュ。裏で作成し、見えている付近だけ描画して高速化</td></tr>
+<tr><th>データの保存先</th><td><code>PVtag.exe</code> と同じフォルダ（<code>tags.json</code>、<code>data.json</code>、<code>cache</code>、<code>person_images</code>）</td></tr>
+<tr><th>元ファイル</th><td>変更しません（タグ情報は別ファイルで管理）</td></tr>
+</table></div>
+</div></section>
+
+<section id="download"><div class="w">
+<h2>ダウンロードと使い方</h2>
+<ol>
+<li>配布ファイル（zip）をダウンロードして、好きな場所に展開します。</li>
+<li><code>PVtag.exe</code> を起動します（同じフォルダに設定やタグが保存されます）。</li>
+<li>設定の「フォルダ」タブで画像・動画のフォルダを登録（エクスプローラーからドラッグ＆ドロップも可）。</li>
+<li>音つきで動画を再生したいときは、VLCをインストールもしくはポータブル版VLCを <code>PVtag.exe</code> の隣の <code>vlc</code> フォルダ内に置きます（64bit版）。</li>
+</ol>
+<p><a class="btn" href="#">ダウンロード</a></p>
+<p class="note">未署名のアプリのため、Windowsの警告やウイルス対策ソフトの確認が出る場合があります。</p>
+</div></section>
+
+<footer>© PVtag</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const C=['#e8a07a','#7aa6e8','#8ed1a1','#d792d8','#e8d07a','#7ad1d1','#e87a8f','#a39be8'];
+const rr=(x,y,w,h,r,f,s)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${f}"${s?` stroke="${s}"`:''}/>`;
+const tx=(x,y,s,c='t')=>`<text x="${x}" y="${y}" class="${c}">${s}</text>`;
+function win(w,h,title){return rr(0,0,w,h,10,'var(--m-win)','var(--m-bd)')+`<path d="M0 10a10 10 0 0 1 10-10h${w-20}a10 10 0 0 1 10 10v16H0z" fill="var(--m-pan)"/>`+tx(14,18,title,'tm')}
+// main
+(()=>{let s=win(720,400,'PVtag');
+s+=rr(8,34,150,358,8,'var(--m-pan)')+tx(18,54,'人物タグ');
+for(let i=0;i<8;i++){const x=18+(i%3)*46,y=64+Math.floor(i/3)*58;s+=`<circle cx="${x+18}" cy="${y+18}" r="18" fill="${C[i]}" opacity=".85"/>`+tx(x+6,y+46,'人物'+(i+1),'tm')}
+s+=rr(166,34,388,358,8,'var(--m-pan)');
+for(let i=0;i<8;i++){const x=176+(i%4)*94,y=44+Math.floor(i/4)*172;
+s+=rr(x,y,86,160,9,'var(--m-card)','var(--m-bd)')+`<rect x="${x+5}" y="${y+5}" width="76" height="96" rx="5" fill="${C[(i*3)%8]}" opacity=".7"/>`+tx(x+8,y+118,'file_'+(i+1)+'.jpg','tm')+tx(x+8,y+134,'@人物'+(i%8+1),'tm')+tx(x+8,y+150,'#風景','tm')}
+s+=rr(562,34,150,358,8,'var(--m-pan)')+tx(572,54,'タグを追加')+rr(572,62,130,24,8,'var(--m-card)','var(--m-bd)')+tx(582,78,'タグ名を入力…','tm')+tx(572,114,'選択中の項目のタグ');
+[['@人物1',572],['#風景',632]].forEach(([n,x],i)=>{s+=rr(x,124,i?50:56,22,11,'var(--ac)')+`<text x="${x+8}" y="139" font-size="10" fill="var(--acfg)">${n}</text>`});
+$('main').innerHTML=s})();
+// viewer
+(()=>{let s=rr(0,0,480,300,10,'var(--m-bar)');
+s+=`<rect x="10" y="10" width="460" height="228" rx="6" fill="#3b4a73"/><circle cx="130" cy="90" r="34" fill="#e8d07a" opacity=".8"/><path d="M10 238V170l110-60 90 70 70-40 190 80v18z" fill="#2b3558"/>`;
+s+=rr(10,248,460,42,8,'#222');
+s+=rr(20,256,52,26,7,'#444')+`<path d="M38 262l14 7-14 7z" fill="#fff"/>`+tx(84,274,'0:42 / 1:30','tm');
+s+=rr(150,266,230,6,3,'#555')+rr(150,266,90,6,3,'#8c9bff')+`<circle cx="240" cy="269" r="7" fill="#8c9bff"/>`+rr(392,256,70,26,7,'#444')+`<text x="404" y="273" font-size="10" fill="#ddd">音あり</text>`;
+$('viewer').innerHTML=s})();
+// palette
+(()=>{let s=win(480,300,'タグパレット');let y=36;
+[['友人',['#旅行','#イベント','#食べ物']],['風景',['#海','#山','#夜景','#空']],['作品',['#イラスト','#写真']]].forEach(([g,ts])=>{
+s+=rr(10,y,460,24,8,'var(--m-pan)')+`<path d="M22 ${y+9}l5 6 5-6" stroke="var(--m-fg)" fill="none" stroke-width="1.6"/>`+tx(42,y+16,'<tspan font-weight="700">'+g+'</tspan>')+tx(430,y+16,ts.length,'tm');y+=28;
+let x=14;ts.forEach(t=>{const w=t.length*12+18;s+=rr(x,y,w,22,11,'var(--m-card)','var(--m-bd)')+tx(x+9,y+15,t);x+=w+6});y+=32});
+$('pal').innerHTML=s})();
+</script>
+</body>
+</html>
